@@ -1,15 +1,19 @@
+def numeric?(input)
+  !Float(input).nil? rescue false
+end
+
 loop do
   puts "Enter an arbitrary number:"
-  input = gets.strip
+  input = gets.chomp
 
-  unless (/^\d+$/).match?(input)
+  unless numeric?(input)
     puts "Sorry, only numbers are accepted!"
     next
   end
 
   break if input.count("1") > 1
 
-  puts "Result: #{input.to_i * 256}"
+  puts "Result: #{Float(input).to_i * 256}"
 end
 
 puts "You broke the rule"
