@@ -9,7 +9,7 @@ animals = {
 puts 'Введіть назву тварини:'
 input = gets.strip.downcase
 
-if animals.include? input
+if animals.include?(input)
   puts "#{input.capitalize} говорить - #{animals[input]}"
 else
   puts 'Введена вами тварина наразі не підтримується'

@@ -14,7 +14,7 @@ def arr.my_own_map
   if block_given?
     until collection_counter == size
       value = yield(self[collection_counter])
-      value *= 2 if value.instance_of? Integer
+      value *= 2 if value.instance_of?(Integer)
 
       result << value
 

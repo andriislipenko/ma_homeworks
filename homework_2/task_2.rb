@@ -1,6 +1,11 @@
 loop do
   puts "Enter an arbitrary number:"
-  input = gets.chomp
+  input = gets.strip
+
+  unless (/^\d+$/).match?(input)
+    puts "Sorry, only numbers are accepted!"
+    next
+  end
 
   break if input.count("1") > 1
 
