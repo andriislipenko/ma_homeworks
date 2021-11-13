@@ -20,7 +20,7 @@ class User
   end
 
   def is_valid_email?
-    /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i.match?(@email)
+    /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i.match?(@email.to_s)
   end
 
   def first_name=(first_name)
@@ -58,7 +58,10 @@ class User
     @email_errors = []
     @email_errors << 'email can not be empty' if empty?(@email)
     @email_errors << 'email must be a string' unless string?(@email)
-    @email_errors << 'email is not valid' unless is_valid_email?
+
+    if @email_errors.empty?
+      @email_errors << 'email is not valid' unless is_valid_email?
+    end
   end
 
   def empty?(value)
