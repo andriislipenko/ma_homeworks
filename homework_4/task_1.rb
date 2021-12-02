@@ -6,17 +6,39 @@ class BricksFactory
   ]
 
   @serial_number = 0
-  @bricks = []
+  @unbroken_bricks = []
 
   class << self
-    attr_accessor :serial_number, :bricks
-    private :serial_number=, :bricks=
+    attr_accessor :serial_number, :unbroken_bricks
+    private :serial_number=, :unbroken_bricks=
 
-    def create
+    def create(count = 1)
+      raise 'Enter positive count' if count < 1
+      count.times.collect { create_brick }
+    end
+
+    def unbroken_count
+      unbroken_bricks.size
+    end
+
+    def recent_unbroken(color)
+      raise 'Enter valid color' unless COLORS.include?(color)
+      unbroken_bricks.select { |brick| brick.color == color }.last(10)
+    end
+
+    def sorted_unbroken
+      unbroken_bricks.sort { |brick_a, brick_b| brick_a.color <=> brick_b.color }
+    end
+
+    private
+
+    def create_brick
       brick = Brick.new(COLORS[rand(3)], serial_number)
-      bricks << brick
 
-      self.serial_number += 1 unless brick.broken?
+      unless brick.broken?
+        unbroken_bricks << brick
+        self.serial_number += 1
+      end
 
       brick
     end
@@ -29,6 +51,8 @@ class Brick
     fine: 'fine',
     broken: 'broken'
   }
+
+  attr_reader :color
 
   def initialize(color, serial_number)
     @color = color
@@ -48,5 +72,7 @@ class Brick
 end
 
 p BricksFactory.create
-p BricksFactory.create
-p BricksFactory.create
+p BricksFactory.create 20
+p BricksFactory.unbroken_count
+p BricksFactory.recent_unbroken('red')
+p BricksFactory.sorted_unbroken
