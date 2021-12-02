@@ -1,9 +1,13 @@
+require './task_2'
+
 class BricksFactory
   COLORS = [
     'red',
     'green',
     'blue'
   ]
+
+  extend Sortable
 
   @serial_number = 0
   @unbroken_bricks = []
@@ -27,7 +31,7 @@ class BricksFactory
     end
 
     def sorted_unbroken
-      unbroken_bricks.sort { |brick_a, brick_b| brick_a.color <=> brick_b.color }
+      unbroken_bricks.sort_by(&:color)
     end
 
     private
@@ -42,6 +46,8 @@ class BricksFactory
 
       brick
     end
+
+    alias sorted_unbroken sort_by
   end
 end
 
