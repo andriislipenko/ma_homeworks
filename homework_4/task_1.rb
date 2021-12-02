@@ -58,7 +58,7 @@ class Brick
     broken: 'broken'
   }
 
-  attr_reader :color
+  attr_reader :color, :serial_number
 
   def initialize(color, serial_number)
     @color = color
@@ -77,8 +77,8 @@ class Brick
   end
 end
 
-p BricksFactory.create
-p BricksFactory.create 20
-p BricksFactory.unbroken_count
-p BricksFactory.recent_unbroken('red')
-p BricksFactory.sorted_unbroken
+BricksFactory.create
+BricksFactory.create 20
+BricksFactory.unbroken_count
+BricksFactory.recent_unbroken('red')
+p BricksFactory.sorted_unbroken(BricksFactory.unbroken_bricks, :color)
