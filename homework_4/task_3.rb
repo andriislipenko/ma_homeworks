@@ -2,13 +2,13 @@ module Accessible
   def attr_accessor(*fields)
     fields.each do |field|
       self.define_method(field) do
-        value = self.instance_variable_get("@#{field.to_s}")
+        value = self.instance_variable_get("@#{field}")
         puts 'this field is empty' if value.nil?
         value
       end
 
-      self.define_method("#{field.to_s}=".to_sym) do |value|
-        self.instance_variable_set("@#{field.to_s}", value)
+      self.define_method("#{field}=".to_sym) do |value|
+        self.instance_variable_set("@#{field}", value)
       end
     end
   end
