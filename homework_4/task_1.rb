@@ -1,47 +1,44 @@
 require './task_2'
 
 class BricksFactory
-  COLORS = [
-    'red',
-    'green',
-    'blue'
-  ]
-
   extend Sortable
+
+  COLORS = %w[red green blue].freeze
 
   @serial_number = 0
   @unbroken_bricks = []
 
   class << self
-    attr_accessor :serial_number, :unbroken_bricks
-    private :serial_number=, :unbroken_bricks=
+    attr_reader :unbroken_bricks
 
-    def create(count = 1)
+    def make_bricks(count = 1)
       raise 'Enter positive count' if count < 1
-      count.times.collect { create_brick }
+
+      count.times.map { create_brick }
     end
 
     def unbroken_count
-      unbroken_bricks.size
+      @unbroken_bricks.size
     end
 
     def recent_unbroken(color)
       raise 'Enter valid color' unless COLORS.include?(color)
-      unbroken_bricks.select { |brick| brick.color == color }.last(10)
+
+      @unbroken_bricks.select { |brick| brick.color == color }.last(10)
     end
 
     def sorted_unbroken
-      unbroken_bricks.sort_by(&:color)
+      @unbroken_bricks.sort_by(&:color)
     end
 
     private
 
     def create_brick
-      brick = Brick.new(COLORS[rand(3)], serial_number)
+      brick = Brick.new(COLORS.sample, @serial_number)
 
       unless brick.broken?
-        unbroken_bricks << brick
-        self.serial_number += 1
+        @unbroken_bricks << brick
+        @serial_number += 1
       end
 
       brick
@@ -56,7 +53,7 @@ class Brick
   STATES = {
     fine: 'fine',
     broken: 'broken'
-  }
+  }.freeze
 
   attr_reader :color, :serial_number
 
@@ -73,12 +70,13 @@ class Brick
   private
 
   def define_state
-    (rand(100) + 1) > 20 ? STATES[:fine] : STATES[:broken]
+    rand(4) != 1 ? STATES[:fine] : STATES[:broken]
   end
 end
 
-BricksFactory.create
-BricksFactory.create 20
+BricksFactory.make_bricks
+BricksFactory.make_bricks 20
 BricksFactory.unbroken_count
 BricksFactory.recent_unbroken('red')
 p BricksFactory.sorted_unbroken(BricksFactory.unbroken_bricks, :color)
+# p BricksFactory.sorted_unbroken
