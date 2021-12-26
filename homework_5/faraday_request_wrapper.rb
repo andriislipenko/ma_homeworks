@@ -3,11 +3,7 @@ require 'faraday'
 class FaradayRequestWrapper
   class << self
     def call(url)
-      response = Faraday.get url
-
-      File.open('./images/image.jpg', 'wb') do |file|
-        file.write(response.body)
-      end
+      Faraday.get url
     end
   end
 end
