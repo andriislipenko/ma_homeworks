@@ -1,7 +1,7 @@
 require './image_uploader'
 
 puts 'Enter image url'
-url = gets.chomp
+url = gets.chomp.strip
 
 ImageUploader.call url
 

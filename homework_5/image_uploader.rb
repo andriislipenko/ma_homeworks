@@ -1,29 +1,30 @@
-require 'uri'
+require 'faraday'
 require './faraday_request_wrapper'
+require './url_validator'
 
 class ImageUploader
-  EXTENSIONS = %w[.jpeg .png .jpg].freeze
-
   class << self
     def call(url)
       @url = url
       validate
-
-      @response = FaradayRequestWrapper.call(@url)
     end
 
-    def upload(filename = nil)
-      filename ||= @url.split('/')[-1]
-      File.open("./images/#{filename}", 'wb') do |file|
-        file.write(@response.body)
+    def upload(filename)
+      FaradayRequestWrapper.call do
+        response = Faraday.get @url
+
+        extension = @url.split('.')[-1]
+        filename = filename.nil? || filename.strip.empty? ? @url.split('/')[-1] : "#{filename}.#{extension}"
+        File.open("./images/#{filename}", 'wb') do |file|
+          file.write(response.body)
+        end
       end
     end
 
     private
 
     def validate
-      URI.parse(@url)
-      raise(URI::InvalidURIError, 'Invalid image url') unless @url.end_with?(*EXTENSIONS)
+      UrlValidator.call @url
     end
   end
 end
