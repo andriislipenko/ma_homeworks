@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     @user.email.downcase!
 
     if @user.save
-      render json: @user.to_json(except: :password_digest)
+      render json: @user.to_json_password_excluded
     else
       render json: @user.errors.full_messages, status: :bad_request
     end
