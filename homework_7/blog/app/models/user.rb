@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   has_many :posts, foreign_key: 'owner_id', dependent: :destroy
   has_many :comments, dependent: :destroy
-  has_and_belongs_to_many :chosen_posts, table_name: 'chosen_posts', class_name: 'Post'
+  has_and_belongs_to_many :chosen_posts, join_table: 'chosen_posts', class_name: 'Post'
 
   has_secure_password
 

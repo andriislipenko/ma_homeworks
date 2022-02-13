@@ -2,6 +2,22 @@ class PostsController < ApplicationController
   before_action :authenticate
   before_action :owner_check, only: %i[update destroy]
 
+  def mark
+    @post = Post.find(params[:post_id])
+
+    current_user.chosen_posts << @post
+    render json: current_user.chosen_posts
+  end
+
+  def index
+    @posts = Post.all
+    @posts = current_user.chosen_posts if params.key? :chosen_posts
+    @posts = @posts.by_creation_date(params.key?(:desc)) if params.key? :sort_by_date
+    @posts = @posts.by_category(params[:category_id]) if params[:category_id]
+
+    render json: @posts
+  end
+
   def create
     @post = Post.new(
       owner: current_user,
