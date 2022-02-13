@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :users, only: [:create]
-  resources :posts
+  resources :posts do
+    resources :comments
+  end
 
   patch 'posts/:post_id/mark', to: 'posts#mark'
 
